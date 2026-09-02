@@ -1,0 +1,135 @@
+<svg width="900" height="520" xmlns="http://www.w3.org/2000/svg" style="background:#0b0e14">
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#2d5a8a"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a4d3a"/>
+      <stop offset="100%" stop-color="#2d7a5a"/>
+    </linearGradient>
+    <linearGradient id="g3" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5a3a1a"/>
+      <stop offset="100%" stop-color="#8a5a2d"/>
+    </linearGradient>
+    <linearGradient id="g4" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4a1a4a"/>
+      <stop offset="100%" stop-color="#7a2d7a"/>
+    </linearGradient>
+    <style>
+      .box { rx:14; ry:14; stroke:#2a3441; stroke-width:1.5; }
+      .title { font-family:ui-sans-serif,system-ui; font-size:12px; font-weight:700; fill:#e6edf3; }
+      .sub { font-family:ui-monospace,monospace; font-size:9.5px; fill:#8b949e; }
+      .label { font-family:ui-sans-serif,system-ui; font-size:11px; font-weight:600; fill:#e6edf3; }
+      .arrow { stroke:#4a5a6e; stroke-width:1.8; fill:none; marker-end:url(#arrowhead); }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <polygon points="0 0, 8 4, 0 8" fill="#4a5a6e"/>
+    </marker>
+  </defs>
+
+  <!-- Title -->
+  <text x="450" y="28" text-anchor="middle" font-family="ui-sans-serif,system-ui" font-size="16" font-weight="800" fill="#e6edf3">PharmForge — Scientific Agentic Integration Platform</text>
+  <text x="450" y="46" text-anchor="middle" font-family="ui-monospace,monospace" font-size="10" fill="#8b949e">DESRES SWE Agentic AI pipeline 923 • RAG + RDKit + Code-Gen + Feedback Loop</text>
+
+  <!-- User -->
+  <rect x="370" y="62" width="160" height="34" rx="17" fill="#1f2a3a" stroke="#2a3441"/>
+  <text x="450" y="82" text-anchor="middle" class="label">User Query</text>
+  <text x="450" y="90" text-anchor="middle" class="sub">“imatinib analogs + ADME + script”</text>
+
+  <!-- DAG boxes -->
+  <rect x="40" y="118" width="150" height="68" class="box" fill="url(#g1)"/>
+  <text x="115" y="138" text-anchor="middle" class="title">Planner</text>
+  <text x="115" y="152" text-anchor="middle" class="sub">intent / smiles</text>
+  <text x="115" y="164" text-anchor="middle" class="sub">subtasks / keywords</text>
+  <text x="115" y="176" text-anchor="middle" class="sub">Pydantic • OTel</text>
+
+  <rect x="210" y="118" width="150" height="68" class="box" fill="url(#g1)"/>
+  <text x="285" y="138" text-anchor="middle" class="title">Retriever</text>
+  <text x="285" y="152" text-anchor="middle" class="sub">Hybrid RAG</text>
+  <text x="285" y="164" text-anchor="middle" class="sub">Chroma 384-d + FTS5 + RRF</text>
+  <text x="285" y="176" text-anchor="middle" class="sub">provenance</text>
+
+  <rect x="380" y="118" width="150" height="68" class="box" fill="url(#g2)"/>
+  <text x="455" y="138" text-anchor="middle" class="title">Chemist (RDKit)</text>
+  <text x="455" y="152" text-anchor="middle" class="sub">Morgan r=2 2048b</text>
+  <text x="455" y="164" text-anchor="middle" class="sub">QED/LogP/TPSA/logS*</text>
+  <text x="455" y="176" text-anchor="middle" class="sub">Tanimoto • ETKDG</text>
+
+  <rect x="550" y="118" width="150" height="68" class="box" fill="url(#g3)"/>
+  <text x="625" y="138" text-anchor="middle" class="title">Critic</text>
+  <text x="625" y="152" text-anchor="middle" class="sub">Lipinski/Veber</text>
+  <text x="625" y="164" text-anchor="middle" class="sub">hallucination guard</text>
+  <text x="625" y="176" text-anchor="middle" class="sub">grounding check</text>
+
+  <rect x="720" y="118" width="150" height="68" class="box" fill="url(#g4)"/>
+  <text x="795" y="138" text-anchor="middle" class="title">Reporter</text>
+  <text x="795" y="152" text-anchor="middle" class="sub">markdown + citations</text>
+  <text x="795" y="164" text-anchor="middle" class="sub">provenance table</text>
+  <text x="795" y="176" text-anchor="middle" class="sub">OTel span</text>
+
+  <!-- Codegen branch -->
+  <rect x="380" y="210" width="150" height="56" class="box" fill="#1a2a3a" stroke="#2d5a8a"/>
+  <text x="455" y="230" text-anchor="middle" class="title">CodeGen</text>
+  <text x="455" y="244" text-anchor="middle" class="sub">RDKit script • sandbox</text>
+  <text x="455" y="256" text-anchor="middle" class="sub">5 s timeout • banned tokens</text>
+
+  <!-- Feedback -->
+  <rect x="210" y="290" width="150" height="56" class="box" fill="#1f2a20" stroke="#2d6a4a"/>
+  <text x="285" y="310" text-anchor="middle" class="title">Feedback Store</text>
+  <text x="285" y="324" text-anchor="middle" class="sub">data/feedback.jsonl</text>
+  <text x="285" y="336" text-anchor="middle" class="sub">_label / _ts</text>
+
+  <rect x="380" y="290" width="150" height="56" class="box" fill="#1f2a20" stroke="#2d6a4a"/>
+  <text x="455" y="310" text-anchor="middle" class="title">Export</text>
+  <text x="455" y="324" text-anchor="middle" class="sub">training_export.jsonl</text>
+  <text x="455" y="336" text-anchor="middle" class="sub">high-QED filter</text>
+
+  <!-- Storage -->
+  <rect x="40" y="290" width="150" height="56" class="box" fill="#1e2430" stroke="#3a4a6a"/>
+  <text x="115" y="310" text-anchor="middle" class="title">Chemical Store</text>
+  <text x="115" y="324" text-anchor="middle" class="sub">800 molecules</text>
+  <text x="115" y="336" text-anchor="middle" class="sub">ChEMBL-inspired</text>
+
+  <rect x="550" y="290" width="150" height="56" class="box" fill="#1e2430" stroke="#3a4a6a"/>
+  <text x="625" y="310" text-anchor="middle" class="title">Observability</text>
+  <text x="625" y="324" text-anchor="middle" class="sub">OTel • Prometheus</text>
+  <text x="625" y="336" text-anchor="middle" class="sub">p50/p95 • Grafana</text>
+
+  <rect x="720" y="290" width="150" height="56" class="box" fill="#1e2430" stroke="#3a4a6a"/>
+  <text x="795" y="310" text-anchor="middle" class="title">API + MCP</text>
+  <text x="795" y="324" text-anchor="middle" class="sub">FastAPI /molecule /query</text>
+  <text x="795" y="336" text-anchor="middle" class="sub">chem.* tools</text>
+
+  <!-- Arrows: DAG -->
+  <line x1="190" y1="152" x2="210" y2="152" class="arrow"/>
+  <line x1="360" y1="152" x2="380" y2="152" class="arrow"/>
+  <line x1="530" y1="152" x2="550" y2="152" class="arrow"/>
+  <line x1="700" y1="152" x2="720" y2="152" class="arrow"/>
+  <!-- vertical to codegen -->
+  <line x1="455" y1="186" x2="455" y2="210" class="arrow"/>
+  <!-- reporter to feedback -->
+  <line x1="795" y1="186" x2="795" y2="290" class="arrow" stroke-dasharray="4 3"/>
+  <line x1="640" y1="318" x2="530" y2="318" class="arrow" stroke-dasharray="4 3"/>
+  <line x1="360" y1="318" x2="190" y2="318" class="arrow" stroke-dasharray="4 3"/>
+  <!-- user to planner -->
+  <line x1="450" y1="96" x2="115" y2="118" class="arrow" stroke="#3a4a6a"/>
+  <line x1="450" y1="96" x2="285" y2="118" class="arrow" stroke="#3a4a6a" opacity="0.5"/>
+  <line x1="450" y1="96" x2="455" y2="118" class="arrow" stroke="#3a4a6a" opacity="0.5"/>
+  <!-- data sources -->
+  <text x="115" y="292" dy="-8" text-anchor="middle" font-size="8" fill="#5a6a8a">┌─ Chroma + FTS ─┐</text>
+  <line x1="115" y1="290" x2="285" y2="290" stroke="#2a3441" stroke-dasharray="2 2"/>
+
+  <!-- Bottom notes -->
+  <rect x="40" y="370" width="830" height="72" rx="10" fill="#11151c" stroke="#2a3441"/>
+  <text x="60" y="388" class="sub" fill="#8b949e">Security: Pydantic input clamping (query 3–2000, top_k 1–20) • SMILES validated before RDKit • sandbox bans socket/requests/os.system • no exec/eval • OTel spans per agent</text>
+  <text x="60" y="402" class="sub" fill="#8b949e">Scientific integration: Real RDKit (Morgan r=2 2048b, Crippen LogP, QED, ETKDGv3) — not mocked. Hash-embed fallback keeps CI green offline; chaos test proves real path: aspirin self-similarity = 1.0, vs ethanol ≈0.11.</text>
+  <text x="60" y="416" class="sub" fill="#8b949e">Feedback loop (JD verbatim): Every trace → data/feedback.jsonl with _label {passed, hallucination, adme_flag_count} → feedback-export filters high-QED + passed → training_export.jsonl for QLoRA on RTX 5060 8 GB.</text>
+  <text x="60" y="430" class="sub" fill="#6a8ab0">Run: pip install -e . &amp;&amp; python scripts/eval.py → 76 tests • 20 queries • 800 molecules • no API keys</text>
+
+  <!-- Footer -->
+  <text x="450" y="462" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="#4a5a6e">pharmforge • MIT • Python 3.11 • FastAPI • RDKit 2026.03 • Chroma 1.5 • Windows 11 / WSL2 / RTX 5060</text>
+  <text x="450" y="476" text-anchor="middle" font-family="ui-monospace,monospace" font-size="8" fill="#3a4a5e">MCP tools: chem.search / chem.similarity / chem.properties / chem.validate / chem.get_molecule  •  API: POST /query /codegen  GET /molecule/{id} /rag/search</text>
+  <rect x="40" y="490" width="830" height="20" rx="8" fill="#0d1117" stroke="#2a3441"/>
+  <text x="450" y="503" text-anchor="middle" font-family="ui-monospace,monospace" font-size="9" fill="#8b949e">▶  Quick start:  python -m pharmforge.cli query “Find imatinib analogs with better solubility”  —  then  curl -X POST :8000/query -d ‘{"query":"predict LogP for aspirin"}’</text>
+</svg>
