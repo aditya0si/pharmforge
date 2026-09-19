@@ -2,10 +2,9 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-
+from pharmforge.rag import query_rag
 from pharmforge.rag.store import HybridStore, embed_text
-from pharmforge.rag import ingest, query_rag
+
 
 def test_embed_deterministic():
     v1 = embed_text("imatinib kinase inhibitor")
@@ -26,7 +25,6 @@ def test_embed_different_texts_different():
 
 def test_hybrid_store_add_and_search(tmp_path: Path = None):
     from pathlib import Path
-    import tempfile
     tmp = Path(tempfile.mkdtemp())
     store = HybridStore(persist_dir=tmp)
     store.clear()
@@ -42,7 +40,6 @@ def test_hybrid_store_add_and_search(tmp_path: Path = None):
     assert hits[0][0] == "PF0001"
 
 def test_fts_search(tmp_path=None):
-    import tempfile
     from pathlib import Path
     tmp = Path(tempfile.mkdtemp())
     store = HybridStore(persist_dir=tmp)
@@ -57,7 +54,6 @@ def test_fts_search(tmp_path=None):
     assert hits[0][0] == "A"
 
 def test_hybrid_rrf(tmp_path=None):
-    import tempfile
     from pathlib import Path
     tmp = Path(tempfile.mkdtemp())
     store = HybridStore(persist_dir=tmp)
@@ -77,7 +73,6 @@ def test_hybrid_rrf(tmp_path=None):
 
 def test_ingest_and_query_rag(tmp_path=None):
     # Use temp persist dir to avoid polluting main
-    import tempfile
     from pathlib import Path
     tmp = Path(tempfile.mkdtemp())
     # We need to test global ingest but avoid double-ingest flakiness
@@ -88,7 +83,6 @@ def test_ingest_and_query_rag(tmp_path=None):
     mols = load_molecules()
     assert len(mols) >= 40
     # ingest 5 into tmp store
-    from pharmforge.rag.store import embed_text
     ids = [m.id for m in mols[:5]]
     texts = [f"{m.name} {m.description} {m.smiles}" for m in mols[:5]]
     metas = [{"name": m.name, "smiles": m.smiles, "tags": m.tags} for m in mols[:5]]
@@ -104,13 +98,12 @@ def test_query_rag_integration():
     assert any("imatinib" in d.name.lower() or d.id == "PF0001" for d in docs)
 
 def test_chromadb_persist(tmp_path=None):
-    import tempfile
     from pathlib import Path
     tmp = Path(tempfile.mkdtemp())
     s1 = HybridStore(persist_dir=tmp)
     s1.clear()
     s1.add(ids=["T1"], texts=["test doc for persist"], metadatas=[{"name": "T", "smiles": "CCO", "tags": []}])
-    cnt1 = s1.count()
+    s1.count()  # warm the store before re-opening it below
     # New instance same dir should see same data (if chroma persist works)
     s2 = HybridStore(persist_dir=tmp)
     # Note: FTS persists, vector may persist; count should be >=1

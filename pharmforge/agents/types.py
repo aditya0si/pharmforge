@@ -1,10 +1,13 @@
 """Typed contracts for agentic DAG."""
 from __future__ import annotations
 
-from typing import List, Optional, Literal, Any
+from typing import List, Literal, Optional
+
 from pydantic import BaseModel, Field
-from pharmforge.rag.store import RetrievedDoc
+
 from pharmforge.chem import PropertyPrediction, SimilarityResult
+from pharmforge.rag.store import RetrievedDoc
+
 
 class PlannerOutput(BaseModel):
     original_query: str

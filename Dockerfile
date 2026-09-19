@@ -9,9 +9,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY pyproject.toml README.md LICENSE ./
 COPY pharmforge pharmforge
-COPY data data
 COPY scripts scripts
 COPY eval eval
+
+# data/ is a runtime directory (feedback log, generated scripts); it is not
+# tracked in git, so it is created here instead of being copied.
+RUN mkdir -p data
 
 RUN pip install --no-cache-dir --upgrade pip \
     && pip install --no-cache-dir -e .

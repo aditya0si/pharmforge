@@ -2,10 +2,9 @@
 import tempfile
 from pathlib import Path
 
-import pytest
-
 from pharmforge.codegen.generator import generate_script
-from pharmforge.codegen.sandbox import validate_script, validate_code_string
+from pharmforge.codegen.sandbox import validate_code_string, validate_script
+
 
 def test_generate_script_returns_code():
     code = generate_script("analyze aspirin", ["CC(=O)OC1=CC=CC=C1C(=O)O"])

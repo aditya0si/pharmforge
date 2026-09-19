@@ -1,10 +1,16 @@
 """Reporter agent — markdown with provenance + optional code."""
 from __future__ import annotations
 
-import textwrap
 from typing import Optional
 
-from pharmforge.agents.types import ReporterOutput, PlannerOutput, RetrieverOutput, ChemistOutput, CriticVerdict
+from pharmforge.agents.types import (
+    ChemistOutput,
+    CriticVerdict,
+    PlannerOutput,
+    ReporterOutput,
+    RetrieverOutput,
+)
+
 
 def report(
     planner: PlannerOutput,
@@ -77,7 +83,7 @@ def report(
         lines.append("## Generated Analysis Script")
         lines.append(f"- **Path:** `{code_path}`")
         lines.append(f"- **Validated:** {code_ok}")
-        lines.append(f"- **Sandbox:** executed headless, no network, 5s timeout")
+        lines.append("- **Sandbox:** executed headless, no network, 5s timeout")
         lines.append("")
     elif planner.needs_codegen:
         lines.append("## Generated Analysis Script")

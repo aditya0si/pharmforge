@@ -2,19 +2,25 @@
 from __future__ import annotations
 
 from typing import List, Optional
+
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 
 from pharmforge.agents.dag import run_dag
 from pharmforge.agents.types import QueryRequest
-from pharmforge.chem import validate_smiles, predict_properties, batch_similarity_search, fingerprint_similarity, generate_conformers
-from pharmforge.data.loader import load_molecules
-from pharmforge.rag import query_rag, ingest
+from pharmforge.chem import (
+    fingerprint_similarity,
+    generate_conformers,
+    predict_properties,
+    validate_smiles,
+)
 from pharmforge.codegen.generator import generate_script
-from pharmforge.codegen.sandbox import validate_script, validate_code_string
+from pharmforge.codegen.sandbox import validate_code_string
+from pharmforge.data.loader import load_molecules
 from pharmforge.feedback.export import export_high_quality
 from pharmforge.observability.metrics import PROM_AVAILABLE
+from pharmforge.rag import ingest, query_rag
 
 app = FastAPI(title="PharmForge", version="0.1.0", description="Scientific Agentic Integration Platform")
 
@@ -34,7 +40,7 @@ def health():
 def metrics():
     if PROM_AVAILABLE:
         try:
-            from prometheus_client import generate_latest, CONTENT_TYPE_LATEST
+            from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
             return PlainTextResponse(generate_latest().decode(), media_type=CONTENT_TYPE_LATEST)
         except Exception:
             pass

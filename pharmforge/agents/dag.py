@@ -2,21 +2,21 @@
 from __future__ import annotations
 
 import time
-import json
 from pathlib import Path
 from typing import Optional
 
-from pharmforge.agents.types import DagTrace
-from pharmforge.agents.planner import plan
-from pharmforge.agents.retriever import retrieve
 from pharmforge.agents.chemist import chemist as run_chemist
 from pharmforge.agents.critic import criticize
+from pharmforge.agents.planner import plan
 from pharmforge.agents.reporter import report
-from pharmforge.observability.metrics import record_query
-from pharmforge.observability.tracing import trace_span
+from pharmforge.agents.retriever import retrieve
+from pharmforge.agents.types import DagTrace
 
 # Feedback
 from pharmforge.feedback.store import append_trace
+from pharmforge.observability.metrics import record_query
+from pharmforge.observability.tracing import trace_span
+
 
 def run_dag(query: str, top_k: int = 5, target_smiles: Optional[str] = None, include_codegen: bool = False) -> DagTrace:
     start = time.perf_counter()

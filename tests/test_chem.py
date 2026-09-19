@@ -1,13 +1,13 @@
 """Tests for chem module — real RDKit when available."""
-import pytest
 from pharmforge.chem import (
-    validate_smiles,
-    fingerprint_similarity,
-    predict_properties,
-    generate_conformers,
-    batch_similarity_search,
     RDKIT_AVAILABLE,
+    batch_similarity_search,
+    fingerprint_similarity,
+    generate_conformers,
+    predict_properties,
+    validate_smiles,
 )
+
 
 def test_validate_valid_smiles():
     ok, err = validate_smiles("CC(=O)OC1=CC=CC=C1C(=O)O")  # aspirin

@@ -6,7 +6,7 @@ import random
 from pathlib import Path
 from typing import List
 
-from .models import Molecule, MoleculeRecord
+from .models import Molecule
 
 DATA_PATH = Path(__file__).parent / "molecules.jsonl"
 
@@ -105,12 +105,14 @@ def _generate_dataset(n: int = 800) -> List[Molecule]:
         # Perturb SMILES slightly — try to append a small fragment via valid chemistry
         # For analogs, we keep same SMILES 50% of time (same scaffold, R-group not in SMILES), 50% try simple alkyl extension
         # This keeps SMILES valid
-        frag = random.choice(fragments)
+        # NOTE: these two draws are unused on purpose, but they are kept so the
+        # random.seed(42) stream — and therefore the generated dataset — stays identical.
+        random.choice(fragments)
         # Only modify SMILES if it stays valid length-wise; we do simple approach: keep original 80% time
         if random.random() < 0.2:
             # Try to create a simple standalone molecule from fragments for diversity
             # Pick 2-3 fragments and join
-            parts = random.sample(fragments, k=random.randint(2, 3))
+            random.sample(fragments, k=random.randint(2, 3))
             # Join with simple bonds — not perfect but often valid: e.g. "CCO.CCN" invalid, use "CCOCCN"
             # We'll just use a tiny valid SMILES set for pure fragments
             simple_valid = [

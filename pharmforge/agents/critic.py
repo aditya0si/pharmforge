@@ -1,7 +1,7 @@
 """Critic agent — validates SMILES, checks ADME, hallucination guard."""
 from __future__ import annotations
 
-from pharmforge.agents.types import CriticVerdict, ChemistOutput, RetrieverOutput
+from pharmforge.agents.types import ChemistOutput, CriticVerdict, RetrieverOutput
 from pharmforge.chem import validate_smiles
 
 # ADME thresholds (Lipinski + Veber inspired)

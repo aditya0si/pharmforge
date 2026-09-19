@@ -2,7 +2,7 @@
 from __future__ import annotations
 
 try:
-    from prometheus_client import Counter, Histogram, Gauge
+    from prometheus_client import Counter, Gauge, Histogram
 
     QUERY_COUNTER = Counter("pharmforge_queries_total", "Total queries", ["passed"])
     QUERY_LATENCY = Histogram("pharmforge_query_latency_ms", "Query latency ms", buckets=[10, 50, 100, 250, 500, 1000, 2500, 5000])

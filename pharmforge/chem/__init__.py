@@ -1,12 +1,11 @@
 """Chem toolchain — RDKit integration with graceful fallback for CI without RDKit."""
 from __future__ import annotations
 
-import math
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 try:
     from rdkit import Chem, DataStructs
-    from rdkit.Chem import AllChem, Crippen, Descriptors, Lipinski, QED
+    from rdkit.Chem import QED, AllChem, Crippen, Descriptors, Lipinski
     from rdkit.Chem.AllChem import GetMorganFingerprintAsBitVect
 
     RDKIT_AVAILABLE = True
