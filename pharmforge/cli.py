@@ -2,9 +2,7 @@
 from __future__ import annotations
 
 import argparse
-import json
-import sys
-from pathlib import Path
+
 
 def cmd_query(args):
     from pharmforge.agents.dag import run_dag

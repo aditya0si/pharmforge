@@ -1,20 +1,18 @@
 """Tests for feedback loop and API."""
-import json
 from pathlib import Path
 
-import pytest
 from fastapi.testclient import TestClient
 
-from pharmforge.api.main import app
 from pharmforge.agents.dag import run_dag
-from pharmforge.feedback.store import load_traces, count_traces
+from pharmforge.api.main import app
 from pharmforge.feedback.export import export_high_quality, export_to_file
+from pharmforge.feedback.store import count_traces, load_traces
 
 client = TestClient(app)
 
 def test_feedback_append_and_load():
     before = count_traces()
-    trace = run_dag("feedback test query aspirin", top_k=2)
+    run_dag("feedback test query aspirin", top_k=2)
     after = count_traces()
     assert after >= before + 1
     traces = load_traces(limit=5)

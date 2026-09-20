@@ -1,8 +1,9 @@
 """Retriever agent — wraps hybrid RAG."""
 from __future__ import annotations
 
-from pharmforge.agents.types import RetrieverOutput, PlannerOutput
+from pharmforge.agents.types import PlannerOutput, RetrieverOutput
 from pharmforge.rag import query_rag
+
 
 def retrieve(planner: PlannerOutput, top_k: int = 5) -> RetrieverOutput:
     # Build enriched query from planner

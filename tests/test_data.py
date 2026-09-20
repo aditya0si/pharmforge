@@ -1,6 +1,7 @@
 """Tests for data loader."""
 from pharmforge.data.loader import load_molecules, search_molecules_sync
 
+
 def test_load_molecules_count():
     mols = load_molecules()
     assert len(mols) >= 40

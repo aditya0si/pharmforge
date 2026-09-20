@@ -1,26 +1,168 @@
 name: CI
 
+# The default branch of this repository is `master`. The previous revision of
+# this file only matched `push`/`pull_request` events on a branch called `main`,
+# which does not exist here, so no event could ever start it.
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.11"
 
 jobs:
-  test:
+  lint:
+    name: lint (ruff)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: pip install -e ".[dev]"
-      - run: pytest tests/ -v --cov=pharmforge --cov-report=term-missing
-      - run: python scripts/eval.py
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install package with dev extras
+        run: pip install -e ".[dev]"
+      - name: Linter version
+        run: ruff --version
+      - name: ruff check
+        run: ruff check . --output-format=github
+      - name: Rule summary
+        run: ruff check . --statistics
 
-  docker:
+  import-smoke:
+    name: import smoke
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: docker compose config
-      - run: docker build -t pharmforge:ci .
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install package with dev extras
+        run: pip install -e ".[dev]"
+      - name: Byte-compile every source tree
+        run: python -m compileall -q pharmforge scripts tests eval
+      - name: Import every module and load the FastAPI app
+        run: |
+          python - <<'PY'
+          import importlib
+          import pkgutil
+
+          import pharmforge
+
+          names = [m.name for m in pkgutil.walk_packages(pharmforge.__path__, "pharmforge.")]
+          failures = []
+          for name in names:
+              try:
+                  importlib.import_module(name)
+              except Exception as exc:
+                  failures.append(f"{name}: {type(exc).__name__}: {exc}")
+          if failures:
+              raise SystemExit("import failures:\n" + "\n".join(failures))
+          print(f"imported {len(names)} modules")
+
+          from pharmforge.api.main import app
+
+          paths = {route.path for route in app.routes}
+          required = {
+              "/health",
+              "/metrics",
+              "/query",
+              "/codegen",
+              "/molecule/{mol_id}",
+              "/molecules",
+              "/chem/validate",
+              "/chem/properties",
+              "/chem/similarity",
+              "/rag/search",
+              "/feedback/export",
+          }
+          missing = required - paths
+          if missing:
+              raise SystemExit(f"FastAPI app is missing routes: {sorted(missing)}")
+          print(f"FastAPI app exposes {len(paths)} routes, all {len(required)} required ones present")
+          PY
+
+  tests:
+    name: tests (pytest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install package with dev extras
+        run: pip install -e ".[dev]"
+      - name: Run test suite
+        run: pytest tests/ -v --cov=pharmforge --cov-report=term-missing
+
+  eval:
+    name: eval harness (20 queries)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+      - name: Install package with dev extras
+        run: pip install -e ".[dev]"
+      - name: Run the eval harness end to end
+        run: python scripts/eval.py
+      - name: Assert every harness query produced a result and none raised
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+
+          from scripts.eval import QUERIES
+
+          report = json.loads(pathlib.Path("eval/report.json").read_text(encoding="utf-8"))
+          results = {row["id"]: row for row in report["results"]}
+
+          missing = [q["id"] for q in QUERIES if q["id"] not in results]
+          if missing:
+              raise SystemExit(f"harness queries with no result: {missing}")
+
+          errored = [qid for qid, row in results.items() if "error" in row]
+          if errored:
+              raise SystemExit(f"harness queries raised: {errored}")
+
+          print(f"eval: {len(results)}/{len(QUERIES)} queries completed, 0 errors")
+          PY
+
+  docker:
+    name: docker build + container smoke
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate the compose file
+        run: docker compose config
+      - name: Build the image
+        run: docker build -t pharmforge:ci .
+      - name: Start the image and wait for /health
+        run: |
+          docker run -d --name pharmforge-ci -p 8000:8000 pharmforge:ci
+          for attempt in $(seq 1 45); do
+            if curl -fsS http://localhost:8000/health; then
+              echo
+              echo "container healthy after ${attempt} attempt(s)"
+              curl -fsS http://localhost:8000/molecule/PF0001
+              echo
+              exit 0
+            fi
+            sleep 2
+          done
+          echo "container never answered /health"
+          docker logs pharmforge-ci
+          exit 1

@@ -16,5 +16,7 @@ eval/report.json
 .vscode/
 *.pyc
 coverage.xml
+.coverage
+.ruff_cache/
 .pytest_cache/
 chromadb/

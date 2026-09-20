@@ -2,10 +2,9 @@
 from __future__ import annotations
 
 import hashlib
-import json
+import math
 import re
 import sqlite3
-import math
 from pathlib import Path
 from typing import List, Optional, Tuple
 

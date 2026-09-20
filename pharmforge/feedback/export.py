@@ -7,6 +7,7 @@ from typing import List
 
 from pharmforge.feedback.store import load_traces
 
+
 def export_high_quality(min_qed: float = 0.4, require_passed: bool = True) -> List[dict]:
     """Export filtered high-quality examples for fine-tuning."""
     traces = load_traces()

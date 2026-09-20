@@ -27,7 +27,7 @@ def ingest(force: bool = False, persist_dir: Path | None = None) -> int:
     if force:
         store.clear()
     mols = load_molecules()
-    ids, texts, metas, embs = [], [], [], []
+    ids, texts, metas = [], [], []
     from pharmforge.rag.store import embed_text
     for m in mols:
         doc = (

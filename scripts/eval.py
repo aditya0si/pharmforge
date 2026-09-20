@@ -1,14 +1,14 @@
 """Eval harness — 20 queries covering similarity, property, codegen, multi."""
 from __future__ import annotations
 
-import time
 import json
+import time
 from pathlib import Path
-from typing import List, Dict
+from typing import Dict, List
 
 from pharmforge.agents.dag import run_dag
-from pharmforge.chem import validate_smiles, fingerprint_similarity
-from pharmforge.rag import query_rag, ingest
+from pharmforge.chem import fingerprint_similarity, validate_smiles
+from pharmforge.rag import ingest, query_rag
 
 # 20 eval queries with expectations
 QUERIES = [

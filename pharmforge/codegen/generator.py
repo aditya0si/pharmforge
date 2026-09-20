@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from typing import List
+
 from pharmforge.rag.store import RetrievedDoc
 
 TEMPLATE = '''"""

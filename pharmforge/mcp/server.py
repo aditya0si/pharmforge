@@ -3,16 +3,16 @@ from __future__ import annotations
 
 import asyncio
 import json
-from typing import Any, List
+from typing import Any
 
 from pharmforge.chem import fingerprint_similarity, predict_properties, validate_smiles
-from pharmforge.rag import query_rag
 from pharmforge.data.loader import load_molecules
+from pharmforge.rag import query_rag
 
 # Try real MCP; fallback to simple JSON-RPC over stdio
 try:
     from mcp.server import Server  # type: ignore
-    from mcp.types import Tool, TextContent  # type: ignore
+    from mcp.types import TextContent, Tool  # type: ignore
     MCP_AVAILABLE = True
 except ImportError:
     MCP_AVAILABLE = False

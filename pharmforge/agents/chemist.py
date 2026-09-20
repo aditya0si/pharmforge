@@ -2,7 +2,8 @@
 from __future__ import annotations
 
 from pharmforge.agents.types import ChemistOutput, PlannerOutput, RetrieverOutput
-from pharmforge.chem import validate_smiles, predict_properties, batch_similarity_search
+from pharmforge.chem import batch_similarity_search, predict_properties, validate_smiles
+
 
 def chemist(planner: PlannerOutput, retriever: RetrieverOutput) -> ChemistOutput:
     props = []

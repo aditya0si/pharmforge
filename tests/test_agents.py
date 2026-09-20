@@ -1,12 +1,12 @@
 """Tests for agentic DAG — planner, retriever, chemist, critic, reporter, full DAG."""
-import pytest
 
-from pharmforge.agents.planner import plan
-from pharmforge.agents.retriever import retrieve
 from pharmforge.agents.chemist import chemist as run_chemist
 from pharmforge.agents.critic import criticize
-from pharmforge.agents.reporter import report
 from pharmforge.agents.dag import run_dag
+from pharmforge.agents.planner import plan
+from pharmforge.agents.reporter import report
+from pharmforge.agents.retriever import retrieve
+
 
 def test_planner_similarity_intent():
     p = plan("Find molecules similar to imatinib")
